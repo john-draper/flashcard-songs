@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+<meta name="theme-color" content="#e85d9c">
+<title>男の子の目的は何？ · Japanese Flashcards</title>
+<style>
+  :root{
+    --pink:#e85d9c; --pink-deep:#c43c79; --pink-soft:#ffd9ec; --pink-bg:#fff0f7;
+    --ink:#3a2230; --gold:#f5b945; --green:#3fb57a;
+    --shadow:0 8px 24px rgba(196,60,121,.18); --radius:22px;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP","Yu Gothic",Meiryo,sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(1200px 500px at 50% -10%, #ffe0f0 0%, rgba(255,224,240,0) 60%),
+      linear-gradient(160deg,#fff7fb 0%,#ffe9f4 45%,#ffe1ef 100%);
+    min-height:100vh; min-height:100dvh;
+    padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  }
+  .wrap{max-width:680px;margin:0 auto;padding:14px 14px 60px}
+  .banner{position:relative;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);
+    aspect-ratio:16/9;background:linear-gradient(135deg,var(--pink),var(--pink-deep));}
+  .banner img{width:100%;height:100%;object-fit:cover;display:block}
+  .banner .veil{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.05) 30%,rgba(58,34,48,.72) 100%)}
+  .banner .cap{position:absolute;left:0;right:0;bottom:0;padding:14px 16px;color:#fff}
+  .banner .cap h1{margin:0;font-size:clamp(18px,5.4vw,26px);line-height:1.25;text-shadow:0 2px 8px rgba(0,0,0,.5)}
+  .banner .cap p{margin:4px 0 0;font-size:12.5px;opacity:.92;letter-spacing:.4px}
+  .banner .badges{position:absolute;top:10px;left:10px;display:flex;gap:6px;flex-wrap:wrap}
+  .pill{background:rgba(255,255,255,.85);color:var(--pink-deep);font-size:11px;font-weight:700;
+    padding:4px 10px;border-radius:999px;backdrop-filter:blur(4px)}
+  .progress-wrap{margin:14px 2px 6px}
+  .progress-top{display:flex;justify-content:space-between;align-items:center;font-size:13px;font-weight:600;margin-bottom:6px}
+  .progress-top .count{color:var(--pink-deep)}
+  .bar{height:12px;border-radius:999px;background:#ffd9ec;overflow:hidden;box-shadow:inset 0 1px 3px rgba(0,0,0,.08)}
+  .bar > i{display:block;height:100%;width:0;border-radius:999px;
+    background:linear-gradient(90deg,var(--gold),var(--pink),var(--pink-deep));transition:width .4s ease}
+  .stage{display:flex;flex-direction:column;align-items:center;margin-top:10px}
+  .card{width:100%;max-width:460px;height:min(58vw,340px);perspective:1400px;cursor:pointer;
+    -webkit-user-select:none;user-select:none;}
+  .card-inner{position:relative;width:100%;height:100%;transition:transform .6s cubic-bezier(.4,.2,.2,1);transform-style:preserve-3d}
+  .card.flipped .card-inner{transform:rotateY(180deg)}
+  .face{position:absolute;inset:0;border-radius:var(--radius);backface-visibility:hidden;
+    -webkit-backface-visibility:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    padding:26px 22px;text-align:center;box-shadow:var(--shadow);overflow:hidden}
+  .face.front{background:radial-gradient(120% 80% at 50% 0%,#fff 0%,#fff6fb 55%,#ffe3f1 100%);border:2px solid #ffc7e2;}
+  .face.back{background:linear-gradient(150deg,#3a2230 0%,#5a2c45 60%,#7a3460 100%);color:#fff;
+    transform:rotateY(180deg);border:2px solid #8a3a66;}
+  .kanji{font-size:clamp(40px,12vw,72px);font-weight:800;line-height:1.1;letter-spacing:.5px;
+    background:linear-gradient(135deg,var(--pink-deep),var(--pink));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .face.front .kana{margin-top:10px;font-size:clamp(15px,4.6vw,20px);color:#a04378;font-weight:600;letter-spacing:1px}
+  .face.front .tap{margin-top:18px;font-size:12px;color:#c98bb0;letter-spacing:.6px}
+  .face.back .romaji{font-size:clamp(20px,6vw,30px);font-weight:700;color:var(--gold);letter-spacing:.5px}
+  .face.back .en{margin-top:12px;font-size:clamp(16px,5vw,22px);font-weight:600;line-height:1.4;max-width:90%}
+  .face.back .tap{margin-top:16px;font-size:12px;opacity:.7;letter-spacing:.5px}
+  .studied-dot{position:absolute;top:12px;right:12px;width:16px;height:16px;border-radius:50%;
+    border:2px solid var(--green);background:#fff;transition:all .2s}
+  .card.studied .studied-dot{background:var(--green);box-shadow:0 0 0 4px rgba(63,181,122,.25)}
+  .cardnum{position:absolute;top:12px;left:14px;font-size:12px;font-weight:700;color:#c98bb0}
+  .face.back .cardnum{color:#ffb8d6}
+  .controls{width:100%;max-width:460px;margin-top:18px;display:grid;grid-template-columns:1fr 1.2fr 1fr;gap:8px}
+  .btn{border:0;border-radius:14px;padding:14px 8px;font-size:14.5px;font-weight:700;cursor:pointer;
+    font-family:inherit;display:flex;flex-direction:column;align-items:center;gap:3px;line-height:1;transition:transform .08s,filter .2s}
+  .btn:active{transform:scale(.95)} .btn .ico{font-size:18px}
+  .btn.nav{background:#fff;color:var(--pink-deep);box-shadow:var(--shadow);border:2px solid #ffc7e2}
+  .btn.flip{background:linear-gradient(135deg,var(--pink),var(--pink-deep));color:#fff;box-shadow:var(--shadow)}
+  .btn:disabled{opacity:.4}
+  .study-toggle{width:100%;max-width:460px;margin-top:10px}
+  .study-toggle button{width:100%;border:0;border-radius:14px;padding:14px;font-size:15px;font-weight:700;
+    cursor:pointer;font-family:inherit;box-shadow:var(--shadow);transition:filter .2s;display:flex;align-items:center;justify-content:center;gap:8px}
+  #studyBtn.unstudied{background:#fff;color:#1f9d57;border:2px solid #bfe8cf}
+  #studyBtn.studied{background:linear-gradient(135deg,#3fb57a,#2e9c63);color:#fff}
+  .toolbar{width:100%;max-width:460px;margin-top:14px;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .tool{border:2px solid #ffc7e2;background:#fff;color:var(--pink-deep);border-radius:14px;padding:12px 8px;
+    font-size:13.5px;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:6px}
+  .tool:active{transform:scale(.97)} .tool.danger{color:#d2436b;border-color:#f6c0cf}
+  .hint{text-align:center;font-size:12px;color:#9a6a86;margin-top:14px;line-height:1.6}
+  details.list{margin-top:16px;background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;border:2px solid #ffd0e4}
+  details.list summary{padding:14px 16px;font-weight:700;color:var(--pink-deep);cursor:pointer;list-style:none}
+  details.list summary::-webkit-details-marker{display:none}
+  details.list summary::before{content:"▸ ";transition:transform .2s;display:inline-block}
+  details.list[open] summary::before{transform:rotate(90deg)}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:8px;padding:4px 14px 16px;max-height:340px;overflow:auto}
+  .chip{border:2px solid #ffd9ec;border-radius:12px;padding:8px 4px;text-align:center;cursor:pointer;background:#fff;transition:all .15s}
+  .chip .cjp{font-size:15px;font-weight:700;color:var(--ink)} .chip .cno{font-size:10px;color:#b58aa0}
+  .chip.done{background:linear-gradient(135deg,#e7f8ee,#d4f1e1);border-color:#bfe8cf} .chip.done .cjp{color:#2e9c63}
+  .chip.cur{outline:2px solid var(--pink);outline-offset:1px}
+  .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(40px);
+    background:var(--ink);color:#fff;padding:12px 18px;border-radius:12px;font-size:14px;font-weight:600;
+    box-shadow:0 8px 24px rgba(0,0,0,.3);opacity:0;transition:all .3s;z-index:50;pointer-events:none}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  .hidden{display:none!important}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="banner">
+    <img src="mv-thumb.jpg" alt="男の子の目的は何？ — 高嶺のなでしこ (HoneyWorks)" onerror="this.style.display='none'">
+    <div class="veil"></div>
+    <div class="badges"><span class="pill">🌸 高嶺のなでしこ</span><span class="pill">HoneyWorks</span></div>
+    <div class="cap"><h1>男の子の目的は何？</h1><p>Japanese Vocabulary Flashcards · each unique word from the song</p></div>
+  </div>
+  <div class="progress-wrap">
+    <div class="progress-top"><span>📚 Study Progress</span>
+      <span class="count"><span id="studiedN">0</span> / <span id="totalN">0</span> studied</span></div>
+    <div class="bar"><i id="barFill"></i></div>
+  </div>
+  <div class="stage">
+    <div class="card" id="card" role="button" tabindex="0" aria-label="Flashcard, click to flip">
+      <div class="card-inner">
+        <div class="face front">
+          <span class="cardnum" id="cardnum"></span><span class="studied-dot" title="studied"></span>
+          <div class="kanji" id="frontKanji">—</div>
+          <div class="kana" id="frontKana">—</div>
+          <div class="tap">tap to flip ↻</div>
+        </div>
+        <div class="face back">
+          <span class="cardnum" id="cardnumB"></span>
+          <div class="romaji" id="backRomaji">—</div>
+          <div class="en" id="backEn">—</div>
+          <div class="tap">tap to flip ↻</div>
+        </div>
+      </div>
+    </div>
+    <div class="controls">
+      <button class="btn nav" id="prevBtn"><span class="ico">◀</span><span>Prev</span></button>
+      <button class="btn flip" id="flipBtn"><span class="ico">↻</span><span>Flip</span></button>
+      <button class="btn nav" id="nextBtn"><span class="ico">▶</span><span>Next</span></button>
+    </div>
+    <div class="study-toggle">
+      <button id="studyBtn" class="unstudied"><span id="studyIco">○</span><span id="studyTxt">Mark as Studied</span></button>
+    </div>
+    <div class="toolbar">
+      <button class="tool" id="saveBtn">💾 Save Progress</button>
+      <button class="tool" id="loadBtn">📂 Load Progress</button>
+      <button class="tool" id="shuffleBtn">🔀 Shuffle</button>
+      <button class="tool danger" id="resetBtn">🗑 Reset</button>
+    </div>
+    <input type="file" id="fileInput" accept="application/json,.json" class="hidden">
+    <p class="hint">Tip: flip card = tap / Space · prev &amp; next = ◀ ▶ / ← → keys · mark studied = S<br>
+       Progress auto-saves in this browser. Use <b>Save Progress</b> to back it up to a file.</p>
+    <details class="list"><summary>All words (tap a chip to jump to it)</summary><div class="grid" id="grid"></div></details>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+"use strict";
+/* VOCABULARY — unique words from 「男の子の目的は何？」 / 高嶺のなでしこ (lyrics: uta-net)
+   jp = as written, kana = reading, romaji = romanization, en = English meaning. */
+const WORDS = [
+  {jp:"ツインテール",kana:"ツインテール",romaji:"tsuintēru",en:"twin tails (hairstyle)"},
+  {jp:"あなた",kana:"あなた",romaji:"anata",en:"you"},
+  {jp:"好み",kana:"このみ",romaji:"konomi",en:"preference / taste / liking"},
+  {jp:"スカート",kana:"スカート",romaji:"sukāto",en:"skirt"},
+  {jp:"ミニ",kana:"ミニ",romaji:"mini",en:"mini (short)"},
+  {jp:"触る",kana:"さわる",romaji:"sawaru",en:"to touch"},
+  {jp:"エッチ",kana:"エッチ",romaji:"etchi",en:"pervert / lewd (slang)"},
+  {jp:"目移り",kana:"めうつり",romaji:"meutsuri",en:"roving eyes / glancing around"},
+  {jp:"お仕置き",kana:"おしおき",romaji:"oshioki",en:"punishment"},
+  {jp:"嘘つき",kana:"うそつき",romaji:"usotsuki",en:"liar"},
+  {jp:"それでも",kana:"それでも",romaji:"soredemo",en:"even so / nevertheless"},
+  {jp:"好き",kana:"すき",romaji:"suki",en:"to like / love"},
+  {jp:"返信",kana:"へんしん",romaji:"henshin",en:"reply (to a message)"},
+  {jp:"既読",kana:"きどく",romaji:"kidoku",en:"read (message status)"},
+  {jp:"待って",kana:"まって",romaji:"matte",en:"wait (te-form of 待つ)"},
+  {jp:"落ち込む",kana:"おちこむ",romaji:"ochikomu",en:"to feel down / get depressed"},
+  {jp:"溜める",kana:"ためる",romaji:"tameru",en:"to save up / hoard"},
+  {jp:"通知",kana:"つうち",romaji:"tsūchi",en:"notification"},
+  {jp:"順番",kana:"じゅんばん",romaji:"junban",en:"order / turn"},
+  {jp:"待ち",kana:"まち",romaji:"machi",en:"waiting"},
+  {jp:"私",kana:"わたし",romaji:"watashi",en:"I / me"},
+  {jp:"価値",kana:"かち",romaji:"kachi",en:"value / worth"},
+  {jp:"無価値",kana:"むかち",romaji:"mukachi",en:"worthless / valueless"},
+  {jp:"もっと",kana:"もっと",romaji:"motto",en:"more"},
+  {jp:"愛して",kana:"あいして",romaji:"aishite",en:"love (te-form of 愛する)"},
+  {jp:"ずっと",kana:"ずっと",romaji:"zutto",en:"always / forever / much"},
+  {jp:"騙して",kana:"だまして",romaji:"damashite",en:"deceive / trick (te-form of 騙す)"},
+  {jp:"負け",kana:"まけ",romaji:"make",en:"loss / defeat"},
+  {jp:"じゃん",kana:"じゃん",romaji:"jan",en:"isn't it? (casual tag)"},
+  {jp:"教えて",kana:"おしえて",romaji:"oshiete",en:"tell / teach (te-form of 教える)"},
+  {jp:"メモ",kana:"メモ",romaji:"memo",en:"memo / note"},
+  {jp:"本気",kana:"ほんき",romaji:"honki",en:"serious / for real"},
+  {jp:"だから",kana:"だから",romaji:"dakara",en:"so / therefore"},
+  {jp:"大好き",kana:"だいすき",romaji:"daisuki",en:"love very much"},
+  {jp:"浮気",kana:"うわき",romaji:"uwaki",en:"cheating / flirting"},
+  {jp:"定義",kana:"ていぎ",romaji:"teigi",en:"definition"},
+  {jp:"手",kana:"て",romaji:"te",en:"hand"},
+  {jp:"繋ぐ",kana:"つなぐ",romaji:"tsunagu",en:"to connect / hold (hands)"},
+  {jp:"いや",kana:"いや",romaji:"iya",en:"no / ugh"},
+  {jp:"二人",kana:"ふたり",romaji:"futari",en:"two people"},
+  // --- second half appended next ---
+  {jp:"有罪",kana:"ゆうざい",romaji:"yūzai",en:"guilty"},
+  {jp:"判決",kana:"はんけつ",romaji:"hanketsu",en:"verdict / judgment"},
+  {jp:"束縛",kana:"そくばく",romaji:"sokubaku",en:"restraint / tying down"},
+  {jp:"他",kana:"ほか",romaji:"hoka",en:"other"},
+  {jp:"女子",kana:"じょし",romaji:"joshi",en:"girl(s)"},
+  {jp:"達",kana:"たち",romaji:"tachi",en:"(plural suffix, e.g. 女子達)"},
+  {jp:"話す",kana:"はなす",romaji:"hanasu",en:"to talk / speak"},
+  {jp:"ほしい",kana:"ほしい",romaji:"hoshii",en:"to want (something)"},
+  {jp:"彼女",kana:"かのじょ",romaji:"kanojo",en:"girlfriend / she"},
+  {jp:"付き合う",kana:"つきあう",romaji:"tsukiau",en:"to date / go out with"},
+  {jp:"軽い",kana:"かるい",romaji:"karui",en:"light / fickle"},
+  {jp:"女",kana:"おんな",romaji:"onna",en:"woman"},
+  {jp:"猫耳",kana:"ねこみみ",romaji:"nekomimi",en:"cat ears"},
+  {jp:"無理",kana:"むり",romaji:"muri",en:"impossible / no way"},
+  {jp:"目的",kana:"もくてき",romaji:"mokuteki",en:"purpose / objective / goal"},
+  {jp:"何",kana:"なに",romaji:"nani",en:"what"},
+  {jp:"一途",kana:"いちず",romaji:"ichizu",en:"devoted / faithful / single-minded"},
+  {jp:"ご褒美",kana:"ごほうび",romaji:"gohōbi",en:"reward"},
+  {jp:"嫌い",kana:"きらい",romaji:"kirai",en:"to dislike / hate"},
+  {jp:"性格",kana:"せいかく",romaji:"seikaku",en:"personality / character"},
+  {jp:"変える",kana:"かえる",romaji:"kaeru",en:"to change"},
+  {jp:"秘密",kana:"ひみつ",romaji:"himitsu",en:"secret"},
+  {jp:"お願い",kana:"おねがい",romaji:"onegai",en:"request / favor / please"},
+  {jp:"一つ",kana:"ひとつ",romaji:"hitotsu",en:"one"},
+  {jp:"何でも",kana:"なんでも",romaji:"nandemo",en:"anything"},
+  {jp:"聞いて",kana:"きいて",romaji:"kiite",en:"listen / ask (te-form of 聞く)"},
+  {jp:"あげる",kana:"あげる",romaji:"ageru",en:"to give / do (for someone)"},
+  {jp:"その代わり",kana:"そのかわり",romaji:"sonokawari",en:"instead / in exchange"},
+  {jp:"ひざ枕",kana:"ひざまくら",romaji:"hizamakura",en:"lap pillow (head on lap)"},
+  {jp:"男の子",kana:"おとこのこ",romaji:"otokonoko",en:"boy"},
+  {jp:"よく",kana:"よく",romaji:"yoku",en:"well / often"},
+  {jp:"分かりません",kana:"わかりません",romaji:"wakarimasen",en:"I don't understand"},
+  {jp:"恥ずかしい",kana:"はずかしい",romaji:"hazukashii",en:"shy / embarrassing"},
+  {jp:"はい",kana:"はい",romaji:"hai",en:"yes / here you are"},
+  {jp:"どうぞ",kana:"どうぞ",romaji:"dōzo",en:"here you go / please"}
+];
+const LS_KEY="takaneko-flashcards-studied", LS_POS="takaneko-flashcards-pos";
+const card=document.getElementById("card"),frontKanji=document.getElementById("frontKanji"),
+  frontKana=document.getElementById("frontKana"),backRomaji=document.getElementById("backRomaji"),
+  backEn=document.getElementById("backEn"),cardnum=document.getElementById("cardnum"),
+  cardnumB=document.getElementById("cardnumB"),prevBtn=document.getElementById("prevBtn"),
+  nextBtn=document.getElementById("nextBtn"),flipBtn=document.getElementById("flipBtn"),
+  studyBtn=document.getElementById("studyBtn"),studyIco=document.getElementById("studyIco"),
+  studyTxt=document.getElementById("studyTxt"),saveBtn=document.getElementById("saveBtn"),
+  loadBtn=document.getElementById("loadBtn"),shuffleBtn=document.getElementById("shuffleBtn"),
+  resetBtn=document.getElementById("resetBtn"),fileInput=document.getElementById("fileInput"),
+  studiedN=document.getElementById("studiedN"),totalN=document.getElementById("totalN"),
+  barFill=document.getElementById("barFill"),grid=document.getElementById("grid"),toast=document.getElementById("toast");
+let order=WORDS.map((_,i)=>i), pos=0, studied=new Set(loadStudied());
+totalN.textContent=WORDS.length;
+function loadStudied(){try{const r=localStorage.getItem(LS_KEY);return r?JSON.parse(r):[];}catch(e){return[];}}
+function saveStudied(){try{localStorage.setItem(LS_KEY,JSON.stringify([...studied]));}catch(e){}}
+function loadPos(){try{const r=parseInt(localStorage.getItem(LS_POS),10);return isNaN(r)?0:Math.max(0,Math.min(r,order.length-1));}catch(e){return 0;}}
+function savePos(){try{localStorage.setItem(LS_POS,String(pos));}catch(e){}}
+function currentIdx(){return order[pos];}
+function render(){
+  const idx=currentIdx(), w=WORDS[idx];
+  frontKanji.textContent=w.jp; frontKana.textContent=w.kana;
+  backRomaji.textContent=w.romaji; backEn.textContent=w.en;
+  cardnum.textContent=(pos+1)+"/"+order.length; cardnumB.textContent=(pos+1)+"/"+order.length;
+  const isStudied=studied.has(idx);
+  card.classList.toggle("studied",isStudied);
+  studyBtn.classList.toggle("studied",isStudied); studyBtn.classList.toggle("unstudied",!isStudied);
+  studyIco.textContent=isStudied?"✓":"○";
+  studyTxt.textContent=isStudied?"Studied ✓ (tap to unmark)":"Mark as Studied";
+  prevBtn.disabled=(pos===0); nextBtn.disabled=(pos===order.length-1);
+  updateProgress(); renderGrid(); savePos();
+}
+function updateProgress(){const n=studied.size; studiedN.textContent=n; barFill.style.width=(n/WORDS.length*100)+"%";}
+function renderGrid(){
+  grid.innerHTML="";
+  order.forEach((idx,p)=>{
+    const w=WORDS[idx], el=document.createElement("div");
+    el.className="chip"+(studied.has(idx)?" done":"")+(p===pos?" cur":"");
+    el.innerHTML='<div class="cjp">'+w.jp+'</div><div class="cno">#'+(idx+1)+'</div>';
+    el.addEventListener("click",()=>{pos=p;card.classList.remove("flipped");render();});
+    grid.appendChild(el);
+  });
+}
+function flip(){card.classList.toggle("flipped");}
+function goPrev(){if(pos>0){pos--;card.classList.remove("flipped");render();}}
+function goNext(){if(pos<order.length-1){pos++;card.classList.remove("flipped");render();}}
+function toggleStudy(){
+  const idx=currentIdx();
+  if(studied.has(idx)){studied.delete(idx);showToast("Marked as not studied");}
+  else{studied.add(idx);showToast("✓ Marked as studied!");}
+  saveStudied(); render();
+}
+function shuffle(){
+  for(let i=order.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[order[i],order[j]]=[order[j],order[i]];}
+  pos=0; card.classList.remove("flipped"); render(); showToast("🔀 Shuffled");
+}
+function resetAll(){
+  if(!confirm("Reset all progress? This clears every 'studied' mark in this browser."))return;
+  studied.clear(); order=WORDS.map((_,i)=>i); pos=0; card.classList.remove("flipped");
+  saveStudied(); render(); showToast("Progress reset");
+}
+function saveProgressFile(){
+  const arr=WORDS.map((_,i)=>i).filter(i=>studied.has(i));
+  const blob=new Blob([JSON.stringify(arr,null,2)],{type:"application/json"});
+  const url=URL.createObjectURL(blob), a=document.createElement("a");
+  a.href=url; a.download="takaneko-flashcards-progress_"+new Date().toISOString().slice(0,10)+".json";
+  document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
+  showToast("💾 Saved "+arr.length+" learned words");
+}
+function loadProgressFile(file){
+  const reader=new FileReader();
+  reader.onload=(e)=>{try{
+    const data=JSON.parse(e.target.result);
+    if(!Array.isArray(data))throw new Error("not an array");
+    const nums=data.map(n=>parseInt(n,10)).filter(n=>!isNaN(n)&&n>=0&&n<WORDS.length);
+    studied=new Set(nums); saveStudied(); render(); showToast("📂 Loaded progress: "+nums.length+" words studied");
+  }catch(err){alert("Could not read that file. Please choose a valid progress JSON file (an array of numbers).");}};
+  reader.readAsText(file);
+}
+let toastTimer;
+function showToast(msg){toast.textContent=msg;toast.classList.add("show");clearTimeout(toastTimer);toastTimer=setTimeout(()=>toast.classList.remove("show"),1800);}
+card.addEventListener("click",flip);
+card.addEventListener("keydown",e=>{
+  if(e.key===" "||e.key==="Enter"){e.preventDefault();flip();}
+  else if(e.key==="ArrowLeft"){goPrev();}else if(e.key==="ArrowRight"){goNext();}
+});
+flipBtn.addEventListener("click",flip); prevBtn.addEventListener("click",goPrev); nextBtn.addEventListener("click",goNext);
+studyBtn.addEventListener("click",toggleStudy); shuffleBtn.addEventListener("click",shuffle);
+resetBtn.addEventListener("click",resetAll); saveBtn.addEventListener("click",saveProgressFile);
+loadBtn.addEventListener("click",()=>fileInput.click());
+fileInput.addEventListener("change",e=>{if(e.target.files[0])loadProgressFile(e.target.files[0]);fileInput.value="";});
+document.addEventListener("keydown",e=>{
+  if(e.target.tagName==="INPUT"||e.target.tagName==="TEXTAREA")return;
+  if(e.key===" "){e.preventDefault();flip();}
+  else if(e.key==="ArrowLeft"){goPrev();}else if(e.key==="ArrowRight"){goNext();}
+  else if(e.key.toLowerCase()==="s"){toggleStudy();}
+});
+pos=loadPos(); render();
+</script>
+</body>
+</html>
