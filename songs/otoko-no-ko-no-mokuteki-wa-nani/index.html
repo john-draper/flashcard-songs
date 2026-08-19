@@ -168,60 +168,73 @@
 <div class="toast" id="toast"></div>
 <script>
 "use strict";
-/* VOCABULARY — unique words from 「男の子の目的は何？」 / 高嶺のなでしこ (lyrics: uta-net)
+/* VOCABULARY — all unique words of 「男の子の目的は何？」 / 高嶺のなでしこ in song order (chorus repeats skipped)
    jp = as written, kana = reading, romaji = romanization, en = English meaning. */
 const WORDS = [
+  // [Intro]
   {jp:"ツインテール",kana:"ツインテール",romaji:"tsuintēru",en:"twin tails (hairstyle)"},
   {jp:"あなた",kana:"あなた",romaji:"anata",en:"you"},
   {jp:"好み",kana:"このみ",romaji:"konomi",en:"preference / taste / liking"},
   {jp:"スカート",kana:"スカート",romaji:"sukāto",en:"skirt"},
   {jp:"ミニ",kana:"ミニ",romaji:"mini",en:"mini (short)"},
-  {jp:"触る",kana:"さわる",romaji:"sawaru",en:"to touch"},
+  {jp:"触るな",kana:"さわるな",romaji:"sawaruna",en:"don't touch! (imperative of 触る)"},
   {jp:"エッチ",kana:"エッチ",romaji:"etchi",en:"pervert / lewd (slang)"},
   {jp:"目移り",kana:"めうつり",romaji:"meutsuri",en:"roving eyes / glancing around"},
   {jp:"お仕置き",kana:"おしおき",romaji:"oshioki",en:"punishment"},
+  {jp:"してない",kana:"してない",romaji:"shitenai",en:"(I) didn't do it (negative of する)"},
   {jp:"嘘つき",kana:"うそつき",romaji:"usotsuki",en:"liar"},
   {jp:"それでも",kana:"それでも",romaji:"soredemo",en:"even so / nevertheless"},
   {jp:"好き",kana:"すき",romaji:"suki",en:"to like / love"},
+  // [Verse 1]
   {jp:"返信",kana:"へんしん",romaji:"henshin",en:"reply (to a message)"},
-  {jp:"既読",kana:"きどく",romaji:"kidoku",en:"read (message status)"},
   {jp:"待って",kana:"まって",romaji:"matte",en:"wait (te-form of 待つ)"},
+  {jp:"既読",kana:"きどく",romaji:"kidoku",en:"read (message status)"},
+  {jp:"付く",kana:"つく",romaji:"tsuku",en:"to be attached / come on (既読もついて)"},
+  {jp:"5分",kana:"ごふん",romaji:"gofun",en:"five minutes"},
   {jp:"落ち込む",kana:"おちこむ",romaji:"ochikomu",en:"to feel down / get depressed"},
   {jp:"溜める",kana:"ためる",romaji:"tameru",en:"to save up / hoard"},
   {jp:"通知",kana:"つうち",romaji:"tsūchi",en:"notification"},
-  {jp:"順番",kana:"じゅんばん",romaji:"junban",en:"order / turn"},
-  {jp:"待ち",kana:"まち",romaji:"machi",en:"waiting"},
+  {jp:"順番待ち",kana:"じゅんばんまち",romaji:"junbanmachi",en:"waiting one's turn / queue"},
   {jp:"私",kana:"わたし",romaji:"watashi",en:"I / me"},
   {jp:"価値",kana:"かち",romaji:"kachi",en:"value / worth"},
   {jp:"無価値",kana:"むかち",romaji:"mukachi",en:"worthless / valueless"},
+  {jp:"そんなもんだし",kana:"そんなもんだし",romaji:"sonna mondashi",en:"that's just how it is (casual)"},
+  // [Pre-Chorus]
   {jp:"もっと",kana:"もっと",romaji:"motto",en:"more"},
   {jp:"愛して",kana:"あいして",romaji:"aishite",en:"love (te-form of 愛する)"},
   {jp:"ずっと",kana:"ずっと",romaji:"zutto",en:"always / forever / much"},
   {jp:"騙して",kana:"だまして",romaji:"damashite",en:"deceive / trick (te-form of 騙す)"},
   {jp:"負け",kana:"まけ",romaji:"make",en:"loss / defeat"},
   {jp:"じゃん",kana:"じゃん",romaji:"jan",en:"isn't it? (casual tag)"},
+  // [Chorus] — new words only (rest repeats the intro)
   {jp:"教えて",kana:"おしえて",romaji:"oshiete",en:"tell / teach (te-form of 教える)"},
   {jp:"メモ",kana:"メモ",romaji:"memo",en:"memo / note"},
+  {jp:"のに",kana:"のに",romaji:"noni",en:"even though (regret / contrast)"},
+  {jp:"それ",kana:"それ",romaji:"sore",en:"that / that one"},
   {jp:"本気",kana:"ほんき",romaji:"honki",en:"serious / for real"},
   {jp:"だから",kana:"だから",romaji:"dakara",en:"so / therefore"},
   {jp:"大好き",kana:"だいすき",romaji:"daisuki",en:"love very much"},
+  // [Verse 2]
   {jp:"浮気",kana:"うわき",romaji:"uwaki",en:"cheating / flirting"},
   {jp:"定義",kana:"ていぎ",romaji:"teigi",en:"definition"},
   {jp:"手",kana:"て",romaji:"te",en:"hand"},
   {jp:"繋ぐ",kana:"つなぐ",romaji:"tsunagu",en:"to connect / hold (hands)"},
   {jp:"いや",kana:"いや",romaji:"iya",en:"no / ugh"},
   {jp:"二人",kana:"ふたり",romaji:"futari",en:"two people"},
-  // --- second half appended next ---
   {jp:"有罪",kana:"ゆうざい",romaji:"yūzai",en:"guilty"},
   {jp:"判決",kana:"はんけつ",romaji:"hanketsu",en:"verdict / judgment"},
   {jp:"束縛",kana:"そくばく",romaji:"sokubaku",en:"restraint / tying down"},
+  {jp:"なんて",kana:"なんて",romaji:"nante",en:"such (a thing) as / things like"},
+  {jp:"したくない",kana:"したくない",romaji:"shitakunai",en:"don't want to do (したい＋ない)"},
   {jp:"他",kana:"ほか",romaji:"hoka",en:"other"},
   {jp:"女子",kana:"じょし",romaji:"joshi",en:"girl(s)"},
   {jp:"達",kana:"たち",romaji:"tachi",en:"(plural suffix, e.g. 女子達)"},
   {jp:"話す",kana:"はなす",romaji:"hanasu",en:"to talk / speak"},
   {jp:"ほしい",kana:"ほしい",romaji:"hoshii",en:"to want (something)"},
+  {jp:"だって",kana:"だって",romaji:"datte",en:"but / because (casual)"},
   {jp:"彼女",kana:"かのじょ",romaji:"kanojo",en:"girlfriend / she"},
   {jp:"付き合う",kana:"つきあう",romaji:"tsukiau",en:"to date / go out with"},
+  // [Chorus 2]
   {jp:"軽い",kana:"かるい",romaji:"karui",en:"light / fickle"},
   {jp:"女",kana:"おんな",romaji:"onna",en:"woman"},
   {jp:"猫耳",kana:"ねこみみ",romaji:"nekomimi",en:"cat ears"},
@@ -233,14 +246,18 @@ const WORDS = [
   {jp:"嫌い",kana:"きらい",romaji:"kirai",en:"to dislike / hate"},
   {jp:"性格",kana:"せいかく",romaji:"seikaku",en:"personality / character"},
   {jp:"変える",kana:"かえる",romaji:"kaeru",en:"to change"},
+  {jp:"これ",kana:"これ",romaji:"kore",en:"this / this one"},
   {jp:"秘密",kana:"ひみつ",romaji:"himitsu",en:"secret"},
+  // [Bridge]
   {jp:"お願い",kana:"おねがい",romaji:"onegai",en:"request / favor / please"},
   {jp:"一つ",kana:"ひとつ",romaji:"hitotsu",en:"one"},
   {jp:"何でも",kana:"なんでも",romaji:"nandemo",en:"anything"},
   {jp:"聞いて",kana:"きいて",romaji:"kiite",en:"listen / ask (te-form of 聞く)"},
   {jp:"あげる",kana:"あげる",romaji:"ageru",en:"to give / do (for someone)"},
   {jp:"その代わり",kana:"そのかわり",romaji:"sonokawari",en:"instead / in exchange"},
+  {jp:"NG",kana:"エヌジー",romaji:"enujī",en:"no-go / off-limits (wasei-eigo)"},
   {jp:"ひざ枕",kana:"ひざまくら",romaji:"hizamakura",en:"lap pillow (head on lap)"},
+  {jp:"とか",kana:"とか",romaji:"toka",en:"things like / or something"},
   {jp:"男の子",kana:"おとこのこ",romaji:"otokonoko",en:"boy"},
   {jp:"よく",kana:"よく",romaji:"yoku",en:"well / often"},
   {jp:"分かりません",kana:"わかりません",romaji:"wakarimasen",en:"I don't understand"},
@@ -248,7 +265,7 @@ const WORDS = [
   {jp:"はい",kana:"はい",romaji:"hai",en:"yes / here you are"},
   {jp:"どうぞ",kana:"どうぞ",romaji:"dōzo",en:"here you go / please"}
 ];
-const LS_KEY="takaneko-flashcards-studied", LS_POS="takaneko-flashcards-pos", LS_FILTER="takaneko-flashcards-filter";
+const LS_KEY="takaneko-flashcards-v2-studied", LS_POS="takaneko-flashcards-v2-pos", LS_FILTER="takaneko-flashcards-v2-filter";
 const card=document.getElementById("card"),frontKanji=document.getElementById("frontKanji"),
   frontKana=document.getElementById("frontKana"),backRomaji=document.getElementById("backRomaji"),
   backEn=document.getElementById("backEn"),cardnum=document.getElementById("cardnum"),
