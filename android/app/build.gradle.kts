@@ -15,9 +15,22 @@ android {
         versionName = "1.0"
     }
 
+    signingConfigs {
+        create("release") {
+            // Keystore is committed on purpose: this is a personal sideload app and a
+            // stable signature matters more than keeping the key private. Set the
+            // KEYSTORE_* env vars (e.g. from GitHub Secrets) to override.
+            storeFile = file("release.keystore")
+            storePassword = System.getenv("KEYSTORE_PASSWORD") ?: "flashcards-songs"
+            keyAlias = System.getenv("KEY_ALIAS") ?: "flashcards"
+            keyPassword = System.getenv("KEY_PASSWORD") ?: "flashcards-songs"
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
+            signingConfig = signingConfigs.getByName("release")
         }
     }
 

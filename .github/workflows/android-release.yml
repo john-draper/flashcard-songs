@@ -1,0 +1,35 @@
+name: android-release
+
+# Push a tag like v1.0.2 to build a signed release APK and publish it as a
+# GitHub Release. The fixed-name asset gives a permanent "latest" download URL:
+#   https://github.com/john-draper/flashcard-songs/releases/latest/download/flashcards-songs.apk
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Build release APK
+        working-directory: android
+        run: ./gradlew assembleRelease --no-daemon
+      - name: Prepare assets
+        run: |
+          cp android/app/build/outputs/apk/release/app-release.apk flashcards-songs.apk
+          cp android/app/build/outputs/apk/release/app-release.apk "flashcards-songs-${GITHUB_REF_NAME}.apk"
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            flashcards-songs.apk
+            flashcards-songs-*.apk
+          generate_release_notes: true

@@ -48,6 +48,15 @@ Phone adaptations: hardware/gesture Back navigates deck → hub → exit, **Save
 writes the JSON into the phone's Downloads, **Load Progress** opens the system file picker,
 and progress auto-save (localStorage) persists inside the app.
 
+**Install:** grab the latest APK —
+<https://github.com/john-draper/flashcard-songs/releases/latest/download/flashcards-songs.apk>
+— copy it to your phone and allow "install unknown apps".
+
+**Releasing a new version:** push a tag (`v1.1.0`) — the
+[`android-release`](.github/workflows/android-release.yml) workflow builds a signed APK
+and attaches it to a GitHub Release automatically. Bump `versionCode`/`versionName` in
+`android/app/build.gradle.kts` when you do.
+
 Build the APK (needs an Android SDK with platform 35 + build-tools 35, and JDK 17):
 ```
 cd android
@@ -55,6 +64,13 @@ gradlew assembleDebug
 # → app/build/outputs/apk/debug/app-debug.apk  (sideload: allow "install unknown apps")
 ```
 Point the SDK location via `android/local.properties` (`sdk.dir=...`); it is gitignored.
+
+**About signing:** the release keystore lives in the repo
+([`android/app/release.keystore`](android/app/release.keystore), documented passwords in
+`android/app/build.gradle.kts`). That is deliberate: for a personal sideload app, keeping
+one stable public signature beats keeping the key private, and it lets CI sign releases
+without secrets. The `KEYSTORE_*` env vars override it if you ever move the key into
+GitHub Secrets instead.
 
 ## Deploy
 GitHub Pages serves the **`main`** branch from the repo **root**. Any push to `main` publishes the site.
