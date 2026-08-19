@@ -39,6 +39,23 @@ flashcard-songs/
 ## Run locally
 Just open `index.html` (the hub) or any `songs/<slug>/index.html` in a browser. Nothing to install.
 
+## Android app
+[`android/`](android/) contains a small native Kotlin wrapper that bundles the whole site
+into an **offline APK** (WebView, no INTERNET permission). The web files at the repo root
+stay canonical — every build copies them into the app, so the APK always matches the site.
+
+Phone adaptations: hardware/gesture Back navigates deck → hub → exit, **Save Progress**
+writes the JSON into the phone's Downloads, **Load Progress** opens the system file picker,
+and progress auto-save (localStorage) persists inside the app.
+
+Build the APK (needs an Android SDK with platform 35 + build-tools 35, and JDK 17):
+```
+cd android
+gradlew assembleDebug
+# → app/build/outputs/apk/debug/app-debug.apk  (sideload: allow "install unknown apps")
+```
+Point the SDK location via `android/local.properties` (`sdk.dir=...`); it is gitignored.
+
 ## Deploy
 GitHub Pages serves the **`main`** branch from the repo **root**. Any push to `main` publishes the site.
 
