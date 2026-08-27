@@ -9,7 +9,7 @@ and save/load your progress — all in a single HTML file with **no build step a
 ## Songs
 | Song | Artist | Cards |
 |------|--------|------:|
-| 男の子の目的は何？ _(Otoko no Ko no Mokuteki wa Nani)_ | 高嶺のなでしこ · HoneyWorks | 86 |
+| 男の子の目的は何？ _(Otoko no Ko no Mokuteki wa Nani)_ | 高嶺のなでしこ · HoneyWorks | 227 |
 
 ## How it's organized
 ```
